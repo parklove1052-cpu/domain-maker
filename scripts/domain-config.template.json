@@ -1,0 +1,19 @@
+{
+    "_comment": "Domain Maker registry. new-domain.ps1 appends to this file. cc.ps1 + statusline.ps1 read it. Single source of truth for shortcut → folder mapping. {{...}} placeholders are filled by install.ps1.",
+    "version": 1,
+    "workspaceName": "{{WORKSPACE_NAME}}",
+    "workspaceRoot": "{{WORKSPACE_ROOT}}",
+    "domainsRoot": "{{DOMAINS_ROOT}}",
+    "obsidianRoot": "{{OBSIDIAN_ROOT}}",
+    "domains": [
+        {
+            "name": "domain-maker",
+            "shortcut": "make",
+            "folder": "domain-maker",
+            "obsidianPrefix": "01",
+            "icon": "🏗️",
+            "description": "Meta domain - creates new domains",
+            "color": "#c2410c"
+        }
+    ]
+}

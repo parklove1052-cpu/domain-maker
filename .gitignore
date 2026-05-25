@@ -1,0 +1,14 @@
+# Local-only output of running install.ps1 in this repo (shouldn't happen, but safe)
+domain-config.json
+
+# Generated test artifacts
+*.tmp
+*.bak-*
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+Thumbs.db
+.DS_Store
