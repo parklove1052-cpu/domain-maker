@@ -103,7 +103,7 @@ Write-Host "  [1/6] workspace folders ready" -ForegroundColor Green
 
 # ---- 2. copy scripts -------------------------------------------------
 $srcScripts = Join-Path $RepoRoot 'scripts'
-foreach ($f in @('new-domain.ps1', 'cc.ps1', 'statusline.ps1')) {
+foreach ($f in @('new-domain.ps1', 'cc.ps1', 'cx.ps1', 'statusline.ps1')) {
     Copy-Item -Path (Join-Path $srcScripts $f) -Destination (Join-Path $WorkspaceScripts $f) -Force
 }
 Write-Host "  [2/6] scripts copied -> $WorkspaceScripts" -ForegroundColor Green
@@ -168,6 +168,7 @@ $blockLines = @(
     '$OutputEncoding = [System.Text.Encoding]::UTF8',
     ('function ' + $MetaShortcut + ' { & "$DomainMakerScripts\cc.ps1" "' + $MetaName + '" @args }'),
     'function cc { param([string]$d) & "$DomainMakerScripts\cc.ps1" $d @args }',
+    'function cx { & "$DomainMakerScripts\cx.ps1" @args }',
     $endMarker
 )
 $block = $blockLines -join "`r`n"
@@ -182,6 +183,24 @@ if ($profileText -match [regex]::Escape($marker)) {
     Set-Content -Path $tmpPath -Value $newContent -Encoding UTF8
     Move-Item -Path $tmpPath -Destination $ProfilePath -Force
     Write-Host "  [5/6] PowerShell profile patched (backup: $backupPath)" -ForegroundColor Green
+}
+
+# ---- 5b. Codex: read each domain's CLAUDE.md as its AGENTS.md ------
+# Codex looks for AGENTS.md; this one line makes it fall back to CLAUDE.md, so
+# both agents share the same per-domain rules without duplicating files.
+$codexCfg = Join-Path $env:USERPROFILE '.codex\config.toml'
+if (Test-Path $codexCfg) {
+    $cfgText = Get-Content $codexCfg -Raw -Encoding UTF8
+    if ($cfgText -match 'project_doc_fallback_filenames') {
+        Write-Host "       codex config already has project_doc_fallback_filenames - skipped" -ForegroundColor Yellow
+    } else {
+        Copy-Item $codexCfg "$codexCfg.bak-$(Get-Date -Format 'yyyy-MM-dd-HHmmss')"
+        # top-level key must come before the first [table]
+        Set-Content -Path $codexCfg -Value ("project_doc_fallback_filenames = [`"CLAUDE.md`"]`r`n" + $cfgText) -Encoding UTF8
+        Write-Host "       codex config: CLAUDE.md registered as AGENTS.md fallback" -ForegroundColor Green
+    }
+} else {
+    Write-Host "       codex not configured (~/.codex/config.toml missing) - skipped; see README 'Using with Codex'" -ForegroundColor DarkGray
 }
 
 # ---- 6. statusLine (optional) + obsidian junction -------------------

@@ -94,6 +94,15 @@ When you ask the meta-domain to "make a new X domain," Claude runs `new-domain.p
 
 The statusLine binary (`statusline.ps1`) reads `domain-config.json` and matches the current `cwd` against every registered domain — bottom-right shows the domain icon + name in a blue box.
 
+### Using with Codex (OpenAI)
+
+The same domains work in Codex. `install.ps1` adds:
+
+- `cx <domain>` — opens `codex` inside that domain folder (extra args pass through, e.g. `cx mkt exec "..."`).
+- `project_doc_fallback_filenames = ["CLAUDE.md"]` at the top of `~/.codex/config.toml` — Codex then reads each domain's `CLAUDE.md` as its `AGENTS.md`, so both agents follow one rulebook and share `memory/`.
+
+Codex agents: start with [`AGENTS.md`](AGENTS.md).
+
 ### Uninstall
 
 ```powershell
@@ -199,6 +208,15 @@ make
 5. `<workspace>/domains/<X>/.vscode/settings.json` 생성 → 지정한 색으로 타이틀/상태/액티비티 바 테마.
 
 statusLine 스크립트(`statusline.ps1`)는 `domain-config.json`을 읽어 현재 `cwd`를 모든 도메인과 매칭 → 오른쪽 하단에 도메인 아이콘+이름이 파란 박스로 표시.
+
+### Codex(OpenAI)에서 쓰기
+
+같은 도메인을 Codex 에서도 그대로 씁니다. `install.ps1` 이 두 가지를 넣습니다.
+
+- `cx <도메인>` — 그 도메인 폴더에서 `codex` 실행 (뒤 인자는 그대로 전달, 예: `cx mkt exec "..."`).
+- `~/.codex/config.toml` 맨 위에 `project_doc_fallback_filenames = ["CLAUDE.md"]` — Codex 가 도메인의 `CLAUDE.md` 를 `AGENTS.md` 처럼 읽어서, 두 에이전트가 같은 규칙·같은 `memory/` 를 씁니다.
+
+Codex 에이전트는 [`AGENTS.md`](AGENTS.md) 부터 읽으세요.
 
 ### 제거
 

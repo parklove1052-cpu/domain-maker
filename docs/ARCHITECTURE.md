@@ -6,6 +6,7 @@
 +-- scripts/
 |   +-- new-domain.ps1     ← creates a new domain (5-step macro)
 |   +-- cc.ps1             ← enter-a-domain TUI + session resume
+|   +-- cx.ps1             ← same, but opens Codex (reads CLAUDE.md via fallback)
 |   +-- statusline.ps1     ← Claude Code statusLine renderer
 |   +-- domain-config.template.json
 +-- templates/
